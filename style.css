@@ -1,0 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 5px;
+    text-align: center;
+}
+
+#library {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+}
