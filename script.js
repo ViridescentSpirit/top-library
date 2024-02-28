@@ -13,9 +13,13 @@ function book(title, author, pages, read) {
 
 book.id = 0;
 
+book.prototype.toggleRead = function() {
+    console.log(this.read);
+    this.read = !this.read;
+};
+
 function addBookToLibrary() {
     const bookAdd = new book(title, author, pages, read);
-
     myLibrary.push(bookAdd);
 };
 
@@ -26,15 +30,16 @@ function displayLibrary() {
     myLibrary.forEach(book => {
         let libraryBook = document.createElement('div');
         libraryBook.setAttribute('id','bookDiv'+i);
-        libraryBook.classList.add(`${myLibrary.bookId}`);
+        libraryBook.classList.add(`${book.bookId}`);
         libraryList.appendChild(libraryBook);
 
         let currentBook = document.getElementById('bookDiv'+i);
         
         for (const property in book) {
-            if (property === 'bookId') {}
+            if (property === 'bookId' || property === 'toggleRead') {}
             else if (property === 'read') {
                 let newPara = document.createElement('p');
+                newPara.setAttribute('id',`${book.bookId}_read`);
                     if (book[property] === true) {
                         newPara.textContent = 'Read!';
                     } else {
@@ -53,6 +58,11 @@ function displayLibrary() {
         deleteButton.textContent = "Remove";
         deleteButton.onclick = remBook;
         currentBook.appendChild(deleteButton);
+
+        let readButton = document.createElement('button');
+        readButton.textContent = "Mark Read";
+        readButton.onclick = readBook;
+        currentBook.appendChild(readButton);
 
         i++;
     });
@@ -82,16 +92,16 @@ function addToDisplay() {
 
     let libraryBook = document.createElement('div');
     libraryBook.setAttribute('id','bookDiv'+i);
+    libraryBook.classList.add(`${book.bookId}`);
     libraryList.appendChild(libraryBook);
     let currentBook = document.getElementById('bookDiv'+i);
 
     for (const property in book) {
-        console.log(property);
-        console.log(book[property]);
-        if (property === 'bookId') {}
+        if (property === 'bookId' || property === 'toggleRead') {}
         else if (property === 'read') {
             let newPara = document.createElement('p');
-                if (book[property] === 'true') {
+            newPara.setAttribute('id',`${book.bookId}_read`);
+                if (book[property] === true) {
                     newPara.textContent = 'Read!';
                 } else {
                     newPara.textContent = 'Unread :(';
@@ -109,22 +119,48 @@ function addToDisplay() {
     deleteButton.textContent = "Remove";
     deleteButton.onclick = remBook;
     currentBook.appendChild(deleteButton);
+
+    let readButton = document.createElement('button');
+    readButton.textContent = "Mark Read";
+    readButton.onclick = readBook;
+    currentBook.appendChild(readButton);
 };
 
 function showForm() {
     document.getElementById('new_book_form').style.display ='block';
-}
+};
 
 function remBook() {
-    const bookId = this.parentElement.classList[1];
+    const bookId = this.parentElement.classList[0];
 
     const findBook = myLibrary.findIndex(
         (element) => element.bookId === bookId
     );
 
-    const delBook = myLibrary.splice(findBook, 1);
+    myLibrary.splice(findBook, 1);
     this.parentElement.remove();
-}
+};
+
+function readBook() {
+    const bookId = this.parentElement.classList[0];
+    
+    const findBook = myLibrary.find(
+        (element) => element.bookId === bookId
+    );
+
+    console.log(findBook);
+
+    findBook.toggleRead();
+    console.log(myLibrary);
+
+    let readPara = document.getElementById(`${bookId}_read`);
+    
+    if (findBook.read === true) {
+        readPara.textContent = 'Read!';
+    } else {
+        readPara.textContent = 'Unread :(';
+    };
+};
 
 title = 'The Hobbit';
 author = 'JRR Tolkien';
