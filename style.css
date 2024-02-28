@@ -12,3 +12,7 @@ p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
 }
+
+#new_book_form {
+    display: none;
+}
